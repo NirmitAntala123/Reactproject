@@ -1,12 +1,21 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { Outlet, Link, Navigate } from "react-router-dom";
+import { Outlet, Link, Navigate, useLocation, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../Context/LoginContext";
+import AuthService from "../services/auth.service";
 import Footer from "./Footer";
+const All = () => {
+  const location = useLocation();
 
+  // The current location.
+  // console.log(location);
+
+  return <div>{location.pathname}</div>;
+};
 const Layout = () => {
- 
+  const location = useLocation();
+  // console.log(location);
   const [errorMessage, setErrorMessage] = useState("");
   const [username, setusername] = useState("");
   const navigate = useNavigate();
@@ -19,28 +28,16 @@ const Layout = () => {
         type: "logout",
         user: userData,
       });
+      AuthService.logout().then((res)=>{
+        const data = res.data;
+      console.log(data);
+      })
     //  navigate("/Login");
   }
+  if (<Route path='*'/>) {
+    // console.log('asdf');
 
-  // useEffect(() => {
-  //   fetch("http://localhost:4000/users/isUserAuth", {
-  //     headers: {
-  //       "x-access-token": localStorage.getItem("token"),
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) =>
-  //       data.isLoggedIn
-  //         ? dispatch({
-  //           type: "Login",
-  //           userData : {
-  //             isLoggedIn: data.isLoggedIn, user: data.user 
-  //           }
-  //         })
-  //         : null
-  //     );
-  //   // .catch(err => setErrorMessage(err))
-  // }, []);
+  }
   useEffect(() => {
     const fetchData = async () => {
       const fetch = await axios.get(`http://localhost:4000/users/isUserAuth`, {
@@ -137,6 +134,16 @@ const Layout = () => {
                     <li>
                       <Link className="dropdown-item" to="/Page4">
                         Page4
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/ReducerDemo">
+                      ReducerDemo
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/Tabs">
+                      Tabs
                       </Link>
                     </li>
                   </ul>

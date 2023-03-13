@@ -1,6 +1,7 @@
 import React, { useState } from 'react' ;
-
+import { useLocation } from 'react-router-dom';
 const Adduser = (props) => {
+  const location = useLocation();
     const initUser = {id: null, name: '', username: ''};
     const [user, setUser] = useState(initUser);
   

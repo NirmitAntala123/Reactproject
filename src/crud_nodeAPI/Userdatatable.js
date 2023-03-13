@@ -39,7 +39,7 @@ const Userdatatable = (props) => {
               return (
                 <tr key={user._id}>
                   <td>{index+1}</td>
-                  <td>{user.name}</td>
+                  <td>{user.firstName}</td>
                   <td>{user.email}</td>
                   <td>{user.password}</td>
 

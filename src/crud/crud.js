@@ -38,6 +38,7 @@ const Crud_custom_hook = () => {
   const deleteUser = (id) => {
     setUsers(users.filter((user) => user.id !== id));
   };
+  
   const initialUser = { id: null, name: "", username: "" };
   const [editing, setEditing] = useState(false);
   const [currentUser, setCurrentUser] = useState(initialUser);

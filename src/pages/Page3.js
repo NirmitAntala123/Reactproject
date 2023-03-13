@@ -1,21 +1,26 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { useState } from "react";
 import { useImmerReducer } from "use-immer";
-const initialState = { count: 0 };
+const initialState = { count: 0 }; 
 
-function reducer(draft, action) {
+
+function reducer(state, action) {
   switch (action.type) {
     case "reset":
       return initialState;
     case "increment":
-      return void draft.count++;
+      return {
+        count: state.count + 1
+      };
     case "decrement":
-      return void draft.count--;
+      return {
+        count: state.count - 1
+      };
   }
 }
 
 const Page3 = () =>  {
-  const [state, dispatch] = useImmerReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [inputValue, setInputValue] = useState("");
   const [todos, setValue] = useState([]);
   const [product, updateProduct] = useState({

@@ -4,6 +4,7 @@ import React, { useState, useLayoutEffect, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../Context/LoginContext";
 import * as Yup from "yup";
+import AuthService from "../services/auth.service";
 const Login = () => {
   const [state, dispatch] = useContext(LoginContext);
   const [errorMessage, setErrorMessage] = useState("");
@@ -19,30 +20,25 @@ const Login = () => {
     };
     if (user.email && user.password) {
       try {
-        const res = await fetch("http://localhost:4000/users/login", {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(user),
-        });
-        const data = await res.json();
-        if (data.message !== "success") {
-          setErrorMessage(data.message);
-          // Swal.fire(e.response.data.message, "", "error");
-        } else {
-          localStorage.setItem("token", data.token);
-          let userData = {
-            isLoggedIn: true,
-            user: undefined,
-            token: data.token,
-          };
-          dispatch({
-            type: "Login",
-            user: userData,
-          });
-          navigate("/");
-        }
+        AuthService.login(user).then((res)=>{
+          const data = res.data;
+          if (data.message !== "success") {
+            setErrorMessage(data.message);
+            // Swal.fire(e.response.data.message, "", "error");
+          } else {
+            localStorage.setItem("token", data.token);
+            let userData = {
+              isLoggedIn: true,
+              user: undefined,
+              token: data.token,
+            };
+            dispatch({
+              type: "Login",
+              user: userData,
+            });
+            navigate("/");
+          }
+        })
       } catch (err) {
         setErrorMessage(err);
       }
@@ -51,7 +47,7 @@ const Login = () => {
 
   return (
     <div className="col-md-12">
-      <div className="card card-container">
+      <div className="card card-container login1">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
           alt="profile-img"
