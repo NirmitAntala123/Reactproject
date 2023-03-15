@@ -1,8 +1,8 @@
-const session = require('express-session');
+// const session = require('express-session');
 const  jwt  = require('jsonwebtoken');
 const auth = (req, res, next) => {
+    console.log(req.body);
     const token = req.headers["x-access-token"]
-    console.log(req.session.user);
     if (token && req.session.user) {
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) return res.json({isLoggedIn: false, message: "Failed To Authenticate"})
@@ -14,7 +14,13 @@ const auth = (req, res, next) => {
             next()
         })
     } else {
-        res.json({message: "Incorrect Token Given", isLoggedIn: false})
+        req.session.destroy((err) => {
+            //delete session data, using sessionID in cookie
+            if (err) throw err;
+            res.clearCookie("secret"); // clears cookie containing expired sessionID
+        
+           return res.status(200).send({ message: "Logged out successfully." });
+          });
     }
 }
 module.exports = auth;

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./Authentication/Login";
 import Register from "./Authentication/Register";
+import RegisterTest from "./Authentication/RegisterTest";
 
 import Main from "./ClassComponent/Main";
 import { LoginContext, LoginProvider } from "./Context/LoginContext";
@@ -43,6 +44,7 @@ const App = () => {
           <Route path="/ReducerDemo" element={<ReducerDemo />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" exact element={<Register />} />
+          {/* <Route path="/Register" exact element={<RegisterTest />} /> */}
 
           
         </Route>

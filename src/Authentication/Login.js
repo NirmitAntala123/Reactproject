@@ -10,40 +10,40 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  async function handleLogin(e) {
-    e.preventDefault();
+  //  const handleLogin=(e) =>{
+  //     e.preventDefault();
 
-    const form = e.target;
-    const user = {
-      email: form[0].value,
-      password: form[1].value,
-    };
-    if (user.email && user.password) {
-      try {
-        AuthService.login(user).then((res)=>{
-          const data = res.data;
-          if (data.message !== "success") {
-            setErrorMessage(data.message);
-            // Swal.fire(e.response.data.message, "", "error");
-          } else {
-            localStorage.setItem("token", data.token);
-            let userData = {
-              isLoggedIn: true,
-              user: undefined,
-              token: data.token,
-            };
-            dispatch({
-              type: "Login",
-              user: userData,
-            });
-            navigate("/");
-          }
-        })
-      } catch (err) {
-        setErrorMessage(err);
-      }
-    }
-  }
+  //     const form = e.target;
+  //     const user = {
+  //       email: form[0].value,
+  //       password: form[1].value,
+  //     };
+  //     // if (user.email && user.password) {
+  //     try {
+  //       AuthService.login(user).then((res) => {
+  //         const data = res.data;
+  //         if (data.message !== "success") {
+  //           setErrorMessage(data.message);
+  //           // Swal.fire(e.response.data.message, "", "error");
+  //         } else {
+  //           localStorage.setItem("token", data.token);
+  //           let userData = {
+  //             isLoggedIn: true,
+  //             user: undefined,
+  //             token: data.token,
+  //           };
+  //           dispatch({
+  //             type: "Login",
+  //             user: userData,
+  //           });
+  //           navigate("/");
+  //         }
+  //       });
+  //     } catch (err) {
+  //       setErrorMessage(err);
+  //     }
+  //     // }
+  //   }
 
   return (
     <div className="col-md-12">
@@ -59,21 +59,39 @@ const Login = () => {
             email: Yup.string().required("User Email field is required !"),
             password: Yup.string().required("Password field is required !"),
           })}
+          onSubmit={async(values, { setSubmitting }) => {
+            const user = {
+              email: values.email,
+              password: values.password,
+            };
+            try {
+              AuthService.login(user).then((res) => {
+                const data = res.data;
+                if (data.message !== "success") {
+                  setErrorMessage(data.message);
+                } else {
+                  localStorage.setItem("token", data.token);
+                  let userData = {
+                    isLoggedIn: true,
+                    user: undefined,
+                    token: data.token,
+                  };
+                  dispatch({
+                    type: "Login",
+                    user: userData,
+                  });
+                  navigate("/");
+                }
+              });
+            } catch (err) {
+              setErrorMessage(err);
+            }
+          }}
         >
-          <Form
-            onSubmit={(e) => handleLogin(e)}
-            //   ref={form}
-          >
+          <Form>
             <div className="form-group">
               <label htmlFor="username">email</label>
-              <Field
-                type="email"
-                className="form-control"
-                name="email"
-                // value={username}
-                // onChange={onChangeUsername}
-                // validations={[required]}
-              />
+              <Field type="email" className="form-control" name="email" />
               <span>
                 <ErrorMessage name="email" />
               </span>
@@ -81,40 +99,18 @@ const Login = () => {
 
             <div className="form-group">
               <label htmlFor="password">Password</label>
-              <Field
-                type="password"
-                className="form-control"
-                name="password"
-                // value={password}
-                // onChange={onChangePassword}
-                // validations={[required]}
-              />
+              <Field type="password" className="form-control" name="password" />
               <span>
                 <ErrorMessage name="password" />
               </span>
             </div>
 
             <div className="form-group">
-              <button
-                className="btn btn-primary btn-block"
-                //   disabled={loading}
-              >
-                {/* {loading && (
-              <span className="spinner-border spinner-border-sm"></span>
-            )} */}
+              <button className="btn btn-primary btn-block">
                 <span>Login</span>
               </button>
               {errorMessage}
             </div>
-
-            {/* {message && (
-          <div className="form-group">
-            <div className="alert alert-danger" role="alert">
-              {message}
-            </div>
-          </div>
-        )} */}
-            {/* <CheckButton style={{ display: "none" }} ref={checkBtn} /> */}
           </Form>
         </Formik>
       </div>
@@ -123,3 +119,4 @@ const Login = () => {
 };
 
 export default Login;
+
